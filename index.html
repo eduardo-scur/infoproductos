@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -315,6 +315,44 @@
     transform: scale(1.04);
   }
 
+  /* ── Card desativado / Em breve ──────────────────────────── */
+  .card.desativado {
+    opacity: .55;
+    filter: grayscale(.6);
+    pointer-events: none;
+    position: relative;
+  }
+  .card.desativado::after {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 16px;
+    background: rgba(10,10,10,.45);
+    z-index: 1;
+  }
+  .em-breve-banner {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    background: rgba(10,10,10,.92);
+    border: 1.5px solid rgba(240,180,41,.5);
+    border-radius: 12px;
+    padding: .75rem 1.4rem;
+    text-align: center;
+    white-space: nowrap;
+  }
+  .em-breve-banner span {
+    display: block;
+    font-family: var(--ff-display);
+    font-size: .95rem; font-weight: 700;
+    color: var(--dourado);
+    letter-spacing: .04em;
+  }
+  .em-breve-banner small {
+    display: block;
+    font-size: .72rem; color: var(--cinza-400);
+    margin-top: .2rem;
+  }
+
   /* ── Por que comprar ─────────────────────────────────────── */
   #porque { background: #0d0d0d; }
   .porque-grid {
@@ -381,25 +419,6 @@
   .depo-nome { font-weight: 600; font-size: .88rem; }
   .depo-cidade { font-size: .78rem; color: var(--cinza-400); }
 
-  /* ── Garantia ─────────────────────────────────────────────── */
-  #garantia { background: #0d0d0d; }
-  .garantia-box {
-    max-width: 700px; margin: 0 auto; text-align: center;
-    background: rgba(240,180,41,.06);
-    border: 1.5px solid rgba(240,180,41,.25);
-    border-radius: 20px;
-    padding: 3rem 2rem;
-  }
-  .garantia-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-  .garantia-box h2 {
-    font-family: var(--ff-display);
-    font-size: 1.8rem; font-weight: 800;
-    color: var(--dourado);
-    margin-bottom: .75rem;
-  }
-  .garantia-box p {
-    color: var(--cinza-400); font-size: .95rem; line-height: 1.65;
-  }
 
   /* ── FAQ ──────────────────────────────────────────────────── */
   #faq { background: var(--preto); }
@@ -470,37 +489,6 @@
     section { padding: 3.5rem 1.25rem; }
     .garantia-box { padding: 2rem 1.25rem; }
   }
-
-  /* Editor visual para modificar la pagina desde el navegador */
-  .edit-toolbar {
-    position: fixed; right: 18px; bottom: 18px; z-index: 9999;
-    display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end;
-    max-width: min(430px, calc(100vw - 28px));
-    padding: 10px; border-radius: 12px;
-    background: rgba(10,10,10,.9); border: 1px solid rgba(255,255,255,.14);
-    box-shadow: 0 12px 40px rgba(0,0,0,.35); backdrop-filter: blur(14px);
-  }
-  .edit-toolbar button {
-    border: 0; border-radius: 999px; cursor: pointer;
-    padding: .65rem .9rem; font-family: var(--ff-body); font-weight: 700;
-    color: var(--preto); background: var(--dourado);
-  }
-  .edit-toolbar button.secondary { background: var(--branco); }
-  .edit-toolbar button.danger { background: #FCA5A5; }
-  body.editor-active [data-editable="true"] {
-    outline: 2px dashed rgba(240,180,41,.85); outline-offset: 4px;
-    border-radius: 6px; cursor: text;
-  }
-  body.editor-active a[data-link-editable="true"] { cursor: pointer; }
-  body.editor-active a[data-link-editable="true"]::after {
-    content: " editar link"; display: inline-block; margin-left: 6px;
-    font-size: .72rem; color: var(--preto); background: var(--dourado);
-    padding: .12rem .38rem; border-radius: 999px; vertical-align: middle;
-  }
-  @media (max-width: 560px) {
-    .edit-toolbar { left: 10px; right: 10px; bottom: 10px; justify-content: center; }
-    .edit-toolbar button { flex: 1 1 42%; padding: .6rem .65rem; }
-  }
 </style>
 </head>
 <body>
@@ -538,11 +526,6 @@
     <div class="stat">
       <div class="stat-num">4.9★</div>
       <div class="stat-label">avaliação média</div>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat">
-      <div class="stat-num">7 dias</div>
-      <div class="stat-label">garantia de reembolso</div>
     </div>
   </div>
 </section>
@@ -583,7 +566,11 @@
       </div>
 
       <!-- Produto 2 -->
-      <div class="card fade-up">
+      <div class="card fade-up desativado">
+        <div class="em-breve-banner">
+          <span>🔒 Em breve</span>
+          <small>Este produto ainda não está disponível</small>
+        </div>
         <div class="card-cover card-cover-2">
           📊
         </div>
@@ -602,16 +589,19 @@
               <span class="price-old">R$ 67,00</span>
               <span class="price-new">R$ 27,00</span>
             </div>
-            <a href="SEU_LINK_KIWIFY_AQUI" target="_blank" class="btn-card">Comprar agora</a>
+            <span class="btn-card" style="background:#444;cursor:not-allowed">Em breve</span>
           </div>
         </div>
       </div>
 
       <!-- Produto 3 -->
-      <div class="card fade-up">
+      <div class="card fade-up desativado">
+        <div class="em-breve-banner">
+          <span>🔒 Em breve</span>
+          <small>Este produto ainda não está disponível</small>
+        </div>
         <div class="card-cover card-cover-3">
           🚀
-          <span class="card-badge-cover">Novo</span>
         </div>
         <div class="card-body">
           <div class="card-tag">E-book · PDF</div>
@@ -628,16 +618,19 @@
               <span class="price-old">R$ 57,00</span>
               <span class="price-new">R$ 27,00</span>
             </div>
-            <a href="SEU_LINK_KIWIFY_AQUI" target="_blank" class="btn-card">Comprar agora</a>
+            <span class="btn-card" style="background:#444;cursor:not-allowed">Em breve</span>
           </div>
         </div>
       </div>
 
       <!-- Produto 4 -->
-      <div class="card fade-up">
+      <div class="card fade-up desativado">
+        <div class="em-breve-banner">
+          <span>🔒 Em breve</span>
+          <small>Este produto ainda não está disponível</small>
+        </div>
         <div class="card-cover card-cover-4">
           💎
-          <span class="card-badge-cover">Kit Completo</span>
         </div>
         <div class="card-body">
           <div class="card-tag">Combo · E-books + Planilha</div>
@@ -654,7 +647,7 @@
               <span class="price-old">R$ 221,00</span>
               <span class="price-new">R$ 67,00</span>
             </div>
-            <a href="SEU_LINK_KIWIFY_AQUI" target="_blank" class="btn-card">Pegar oferta →</a>
+            <span class="btn-card" style="background:#444;cursor:not-allowed">Em breve</span>
           </div>
         </div>
       </div>
@@ -696,11 +689,7 @@
         <div class="porque-title">Resultados reais</div>
         <div class="porque-text">Conteúdo baseado em métodos comprovados usados por milhares de pessoas que transformaram suas finanças.</div>
       </div>
-      <div class="porque-card fade-up">
-        <div class="porque-icon">🔄</div>
-        <div class="porque-title">7 dias de garantia</div>
-        <div class="porque-text">Não gostou? Pedimos reembolso total em até 7 dias, sem perguntas e sem burocracia.</div>
-      </div>
+
     </div>
   </div>
 </section>
@@ -788,16 +777,6 @@
   </div>
 </section>
 
-<!-- ── GARANTIA ─────────────────────────────────────────────────── -->
-<section id="garantia">
-  <div class="container">
-    <div class="garantia-box fade-up">
-      <div class="garantia-icon">🛡️</div>
-      <h2>Garantia de 7 dias</h2>
-      <p>Se você comprar qualquer produto e, por qualquer motivo, não ficar satisfeito — basta enviar um e-mail em até 7 dias e devolvemos 100% do seu dinheiro. Sem perguntas, sem burocracia, sem complicação. O risco é zero para você.</p>
-    </div>
-  </div>
-</section>
 
 <!-- ── FAQ ─────────────────────────────────────────────────────── -->
 <section id="faq">
@@ -841,13 +820,7 @@
         </button>
         <div class="faq-answer">Sim. O pagamento é processado pela Kiwify, que é uma das plataformas mais seguras do Brasil para compra de infoprodutos. Aceitamos cartão de crédito, PIX e boleto.</div>
       </div>
-      <div class="faq-item fade-up">
-        <button class="faq-btn" onclick="toggleFaq(this)">
-          Como funciona a garantia?
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer">Se por qualquer motivo você não ficar satisfeito, basta enviar um e-mail dentro de 7 dias após a compra solicitando o reembolso. Devolvemos 100% do valor pago sem burocracia.</div>
-      </div>
+
     </div>
   </div>
 </section>
@@ -893,114 +866,5 @@
     observer.observe(el);
   });
 </script>
-
-<div class="edit-toolbar" aria-label="Herramientas de edicion">
-  <button type="button" id="editToggle">Activar edicion</button>
-  <button type="button" id="saveEdits" class="secondary">Guardar</button>
-  <button type="button" id="exportHtml" class="secondary">Exportar HTML</button>
-  <button type="button" id="resetEdits" class="danger">Restaurar</button>
-</div>
-<script>
-  // Editor local: permite cambiar textos y enlaces sin tocar codigo.
-  (function () {
-    const storageKey = 'loja-infoprodutos-edits-v1';
-    const editableSelector = 'h1,h2,h3,p,.nav-logo,.nav-cta,.hero-badge,.stat-num,.stat-label,.section-tag,.section-title,.section-sub,.card-tag,.card-title,.card-desc,.card-includes li,.price-old,.price-new,.btn-card,.feature-text,.depo-text,.depo-nome,.depo-cidade,.faq-btn,.faq-answer,footer p';
-    const linkSelector = 'a[href]';
-    const editToggle = document.getElementById('editToggle');
-    const saveBtn = document.getElementById('saveEdits');
-    const exportBtn = document.getElementById('exportHtml');
-    const resetBtn = document.getElementById('resetEdits');
-
-    function prepareEditables() {
-      document.querySelectorAll(editableSelector).forEach((el, index) => {
-        if (el.closest('.edit-toolbar')) return;
-        el.dataset.editable = 'true';
-        el.dataset.editId = el.dataset.editId || `text-${index}`;
-      });
-      document.querySelectorAll(linkSelector).forEach((el, index) => {
-        if (el.closest('.edit-toolbar')) return;
-        el.dataset.linkEditable = 'true';
-        el.dataset.linkId = el.dataset.linkId || `link-${index}`;
-      });
-    }
-
-    function collectEdits() {
-      const text = {};
-      const links = {};
-      document.querySelectorAll('[data-editable="true"]').forEach(el => {
-        text[el.dataset.editId] = el.innerHTML;
-      });
-      document.querySelectorAll('[data-link-editable="true"]').forEach(el => {
-        links[el.dataset.linkId] = el.getAttribute('href');
-      });
-      return { text, links };
-    }
-
-    function applyEdits(edits) {
-      if (!edits) return;
-      Object.entries(edits.text || {}).forEach(([id, value]) => {
-        const el = document.querySelector(`[data-edit-id="${CSS.escape(id)}"]`);
-        if (el) el.innerHTML = value;
-      });
-      Object.entries(edits.links || {}).forEach(([id, value]) => {
-        const el = document.querySelector(`[data-link-id="${CSS.escape(id)}"]`);
-        if (el) el.setAttribute('href', value);
-      });
-    }
-
-    function saveEdits() {
-      localStorage.setItem(storageKey, JSON.stringify(collectEdits()));
-      saveBtn.textContent = 'Guardado';
-      setTimeout(() => { saveBtn.textContent = 'Guardar'; }, 1200);
-    }
-
-    function setEditing(active) {
-      document.body.classList.toggle('editor-active', active);
-      document.querySelectorAll('[data-editable="true"]').forEach(el => {
-        el.contentEditable = active ? 'true' : 'false';
-        el.spellcheck = active;
-      });
-      editToggle.textContent = active ? 'Desactivar edicion' : 'Activar edicion';
-    }
-
-    function exportHtml() {
-      saveEdits();
-      const clone = document.documentElement.cloneNode(true);
-      clone.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
-      clone.querySelectorAll('.editor-active').forEach(el => el.classList.remove('editor-active'));
-      const output = '<!DOCTYPE html>\n' + clone.outerHTML;
-      const blob = new Blob([output], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = 'loja_infoprodutos_modificada.html';
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    }
-
-    prepareEditables();
-    try { applyEdits(JSON.parse(localStorage.getItem(storageKey))); } catch (error) {}
-
-    editToggle.addEventListener('click', () => setEditing(!document.body.classList.contains('editor-active')));
-    saveBtn.addEventListener('click', saveEdits);
-    exportBtn.addEventListener('click', exportHtml);
-    resetBtn.addEventListener('click', () => {
-      if (confirm('Restaurar los cambios guardados en este navegador?')) {
-        localStorage.removeItem(storageKey);
-        location.reload();
-      }
-    });
-    document.addEventListener('click', (event) => {
-      const link = event.target.closest('a[data-link-editable="true"]');
-      if (!link || !document.body.classList.contains('editor-active')) return;
-      event.preventDefault();
-      const nextHref = prompt('Nuevo enlace:', link.getAttribute('href') || '');
-      if (nextHref !== null) link.setAttribute('href', nextHref.trim());
-    }, true);
-  })();
-</script>
 </body>
 </html>
-
