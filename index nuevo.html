@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dinheiro no Bolso – Infoprodutos de Finanças</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --verde-escuro:  #0B3D2E;
+    --verde-medio:   #166B47;
+    --verde-claro:   #22A15A;
+    --verde-brilho:  #2ECC71;
+    --dourado:       #F0B429;
+    --dourado-claro: #FEF3C7;
+    --creme:         #F9F8F4;
+    --branco:        #FFFFFF;
+    --cinza-100:     #F3F4F6;
+    --cinza-400:     #9CA3AF;
+    --cinza-700:     #374151;
+    --preto:         #0A0A0A;
+    --ff-display:    'Syne', sans-serif;
+    --ff-body:       'Inter', sans-serif;
+    --radius:        12px;
+    --shadow-hover:  0 12px 40px rgba(0,0,0,.18);
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--ff-body);
+    background: var(--preto);
+    color: var(--branco);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── PÁGINAS (SPA) ──────────────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── Navbar ─────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem;
+    background: rgba(10,10,10,.88);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .nav-logo {
+    font-family: var(--ff-display);
+    font-weight: 800; font-size: 1.1rem;
+    color: var(--dourado);
+    letter-spacing: -.02em;
+    text-decoration: none; cursor: pointer;
+  }
+  .nav-logo span { color: var(--branco); }
+  .nav-cta {
+    background: var(--dourado); color: var(--preto);
+    font-weight: 600; font-size: .85rem;
+    padding: .5rem 1.25rem; border-radius: 99px;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(240,180,41,.4); }
+
+  /* ── Hero ────────────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 7rem 1.5rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(34,161,90,.18) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(240,180,41,.08) 0%, transparent 60%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 0%, black 40%, transparent 100%);
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(34,161,90,.15);
+    border: 1px solid rgba(34,161,90,.3);
+    color: var(--verde-brilho);
+    font-size: .8rem; font-weight: 600;
+    padding: .35rem 1rem; border-radius: 99px;
+    margin-bottom: 1.5rem; position: relative;
+  }
+  .badge-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--verde-brilho);
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%       { opacity: .5; transform: scale(1.4); }
+  }
+  .hero h1 {
+    font-family: var(--ff-display);
+    font-size: clamp(2.4rem, 7vw, 5rem);
+    font-weight: 800; line-height: 1.05;
+    letter-spacing: -.03em;
+    position: relative; max-width: 820px;
+  }
+  .hero h1 em { font-style: normal; color: var(--dourado); }
+  .hero-sub {
+    margin-top: 1.25rem;
+    font-size: clamp(1rem, 2.5vw, 1.2rem);
+    color: var(--cinza-400); max-width: 560px; position: relative;
+  }
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    justify-content: center; margin-top: 2.5rem; position: relative;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--verde-claro), var(--verde-medio));
+    color: var(--branco); font-weight: 600; font-size: 1rem;
+    padding: .9rem 2rem; border-radius: var(--radius);
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 32px rgba(34,161,90,.45); }
+  .btn-outline {
+    background: transparent; border: 1px solid rgba(255,255,255,.2);
+    color: var(--branco); font-weight: 500; font-size: 1rem;
+    padding: .9rem 1.75rem; border-radius: var(--radius);
+    text-decoration: none; transition: border-color .2s, background .2s;
+  }
+  .btn-outline:hover { border-color: rgba(255,255,255,.5); background: rgba(255,255,255,.05); }
+  .hero-stats {
+    display: flex; gap: 2.5rem; flex-wrap: wrap;
+    justify-content: center; margin-top: 3.5rem; position: relative;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: var(--ff-display); font-size: 2rem; font-weight: 800; color: var(--dourado); line-height: 1; }
+  .stat-label { font-size: .8rem; color: var(--cinza-400); margin-top: .25rem; }
+  .stat-divider { width: 1px; background: rgba(255,255,255,.1); align-self: stretch; }
+
+  /* ── Sections ────────────────────────────────────────────── */
+  section { padding: 5rem 1.5rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    display: inline-block; font-size: .75rem; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    color: var(--verde-brilho); margin-bottom: .75rem;
+  }
+  .section-title {
+    font-family: var(--ff-display);
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800; line-height: 1.1;
+    letter-spacing: -.02em; margin-bottom: 1rem;
+  }
+  .section-title em { font-style: normal; color: var(--dourado); }
+  .section-sub { color: var(--cinza-400); font-size: 1.05rem; max-width: 540px; margin-bottom: 3rem; }
+
+  /* ── Cards de Produto ────────────────────────────────────── */
+  #produtos { background: var(--preto); }
+  .produtos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .card {
+    background: #111; border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px; overflow: hidden;
+    transition: transform .3s, box-shadow .3s, border-color .3s;
+    display: flex; flex-direction: column;
+  }
+  .card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: rgba(34,161,90,.3); }
+  .card-cover {
+    height: 180px; display: flex; align-items: center; justify-content: center;
+    font-size: 4rem; position: relative; overflow: hidden;
+  }
+  .card-cover-1 { background: linear-gradient(135deg, #0B3D2E 0%, #166B47 100%); }
+  .card-cover-2 { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); }
+  .card-cover-3 { background: linear-gradient(135deg, #2D1B00 0%, #6B3D00 100%); }
+  .card-cover-4 { background: linear-gradient(135deg, #1a0030 0%, #4B0082 100%); }
+  .card-cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.5), transparent);
+  }
+  .card-badge-cover {
+    position: absolute; top: 12px; right: 12px; z-index: 1;
+    background: var(--dourado); color: var(--preto);
+    font-size: .7rem; font-weight: 700;
+    padding: .25rem .7rem; border-radius: 99px;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .card-body { padding: 1.5rem; display: flex; flex-direction: column; flex: 1; }
+  .card-tag { font-size: .7rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--verde-brilho); margin-bottom: .5rem; }
+  .card-title { font-family: var(--ff-display); font-size: 1.25rem; font-weight: 700; line-height: 1.2; margin-bottom: .5rem; }
+  .card-desc { font-size: .9rem; color: var(--cinza-400); line-height: 1.55; margin-bottom: 1.25rem; flex: 1; }
+  .card-includes { list-style: none; margin-bottom: 1.25rem; }
+  .card-includes li { font-size: .82rem; color: #ccc; padding: .25rem 0; display: flex; align-items: center; gap: .5rem; }
+  .card-includes li::before { content: '✓'; color: var(--verde-brilho); font-weight: 700; font-size: .85rem; flex-shrink: 0; }
+  .card-footer {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-top: 1rem; border-top: 1px solid rgba(255,255,255,.07);
+  }
+  .card-price { display: flex; flex-direction: column; }
+  .price-old { font-size: .78rem; color: var(--cinza-400); text-decoration: line-through; }
+  .price-new { font-family: var(--ff-display); font-size: 1.5rem; font-weight: 800; color: var(--dourado); line-height: 1; }
+  .btn-card {
+    background: var(--verde-claro); color: var(--branco);
+    font-weight: 600; font-size: .88rem;
+    padding: .65rem 1.35rem; border-radius: 8px;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: background .2s, transform .2s; white-space: nowrap;
+  }
+  .btn-card:hover { background: var(--verde-brilho); transform: scale(1.04); }
+
+  /* ── Card desativado ─────────────────────────────────────── */
+  .card.desativado {
+    opacity: .5; filter: grayscale(.6);
+    pointer-events: none; position: relative;
+  }
+  .card.desativado::after {
+    content: ''; position: absolute; inset: 0;
+    border-radius: 16px; background: rgba(10,10,10,.45); z-index: 1;
+  }
+  .em-breve-banner {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%); z-index: 2;
+    background: rgba(10,10,10,.92);
+    border: 1.5px solid rgba(240,180,41,.5);
+    border-radius: 12px; padding: .75rem 1.4rem;
+    text-align: center; white-space: nowrap;
+  }
+  .em-breve-banner span { display: block; font-family: var(--ff-display); font-size: .95rem; font-weight: 700; color: var(--dourado); letter-spacing: .04em; }
+  .em-breve-banner small { display: block; font-size: .72rem; color: var(--cinza-400); margin-top: .2rem; }
+
+  /* ── Por que comprar ─────────────────────────────────────── */
+  #porque { background: #0d0d0d; }
+  .porque-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+  .porque-card {
+    background: rgba(255,255,255,.03); border: 1px solid rgba(255,255,255,.07);
+    border-radius: var(--radius); padding: 1.5rem;
+    transition: border-color .2s, background .2s;
+  }
+  .porque-card:hover { background: rgba(34,161,90,.05); border-color: rgba(34,161,90,.25); }
+  .porque-icon { font-size: 1.8rem; margin-bottom: .75rem; }
+  .porque-title { font-family: var(--ff-display); font-weight: 700; font-size: 1rem; margin-bottom: .4rem; }
+  .porque-text { font-size: .85rem; color: var(--cinza-400); line-height: 1.55; }
+
+  /* ── Depoimentos ─────────────────────────────────────────── */
+  #depoimentos { background: var(--preto); }
+  .depo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.25rem; }
+  .depo-card { background: #111; border: 1px solid rgba(255,255,255,.07); border-radius: var(--radius); padding: 1.5rem; }
+  .depo-stars { color: var(--dourado); font-size: 1rem; margin-bottom: .75rem; }
+  .depo-text { font-size: .9rem; color: #ddd; line-height: 1.6; margin-bottom: 1rem; font-style: italic; }
+  .depo-autor { display: flex; align-items: center; gap: .75rem; }
+  .depo-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--verde-medio), var(--dourado));
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .9rem; color: var(--branco); flex-shrink: 0;
+  }
+  .depo-nome { font-weight: 600; font-size: .88rem; }
+  .depo-cidade { font-size: .78rem; color: var(--cinza-400); }
+
+  /* ── FAQ ─────────────────────────────────────────────────── */
+  #faq { background: #0d0d0d; }
+  .faq-list { max-width: 700px; }
+  .faq-item { border-bottom: 1px solid rgba(255,255,255,.08); }
+  .faq-btn {
+    width: 100%; display: flex; align-items: center;
+    justify-content: space-between; gap: 1rem;
+    background: none; border: none; cursor: pointer;
+    padding: 1.25rem 0; text-align: left;
+    color: var(--branco); font-size: .95rem; font-weight: 600;
+    font-family: var(--ff-body); transition: color .2s;
+  }
+  .faq-btn:hover { color: var(--verde-brilho); }
+  .faq-icon { font-size: 1.2rem; color: var(--dourado); flex-shrink: 0; transition: transform .3s; }
+  .faq-answer {
+    font-size: .9rem; color: var(--cinza-400); line-height: 1.65;
+    max-height: 0; overflow: hidden; transition: max-height .35s ease, padding .35s;
+  }
+  .faq-item.open .faq-answer { max-height: 200px; padding-bottom: 1.25rem; }
+  .faq-item.open .faq-icon { transform: rotate(45deg); }
+
+  /* ── CTA Final ───────────────────────────────────────────── */
+  #cta-final {
+    background: linear-gradient(135deg, var(--verde-escuro) 0%, #0B1F0F 100%);
+    text-align: center; padding: 6rem 1.5rem;
+  }
+  #cta-final h2 { font-family: var(--ff-display); font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; letter-spacing: -.02em; margin-bottom: 1rem; }
+  #cta-final p { color: #9CA3AF; margin-bottom: 2.5rem; font-size: 1.05rem; }
+
+  /* ── Footer ──────────────────────────────────────────────── */
+  footer {
+    background: #070707; text-align: center;
+    padding: 2rem; border-top: 1px solid rgba(255,255,255,.06);
+    font-size: .82rem; color: var(--cinza-400);
+  }
+  footer a { color: var(--verde-brilho); text-decoration: none; }
+
+  /* ── Fade up ─────────────────────────────────────────────── */
+  .fade-up { opacity: 0; transform: translateY(28px); transition: opacity .6s ease, transform .6s ease; }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  /* ═══════════════════════════════════════════════════════════
+     CHECKOUT PAGE
+  ═══════════════════════════════════════════════════════════ */
+  #page-checkout { background: #0d0d0d; min-height: 100vh; padding-top: 80px; }
+
+  .checkout-wrapper {
+    max-width: 960px; margin: 0 auto;
+    padding: 3rem 1.5rem;
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  /* Painel esquerdo – resumo do produto */
+  .checkout-summary {
+    background: #111;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .checkout-cover {
+    height: 200px;
+    background: linear-gradient(135deg, #0B3D2E 0%, #166B47 100%);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 5rem; position: relative;
+  }
+  .checkout-cover::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,.6), transparent);
+  }
+  .checkout-cover-badge {
+    position: absolute; top: 14px; right: 14px; z-index: 1;
+    background: var(--dourado); color: var(--preto);
+    font-size: .7rem; font-weight: 700;
+    padding: .3rem .8rem; border-radius: 99px;
+    text-transform: uppercase; letter-spacing: .05em;
+  }
+  .checkout-info { padding: 1.75rem; }
+  .checkout-tag { font-size: .7rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--verde-brilho); margin-bottom: .4rem; }
+  .checkout-title { font-family: var(--ff-display); font-size: 1.4rem; font-weight: 800; line-height: 1.2; margin-bottom: .75rem; }
+  .checkout-desc { font-size: .9rem; color: var(--cinza-400); line-height: 1.6; margin-bottom: 1.25rem; }
+  .checkout-includes { list-style: none; border-top: 1px solid rgba(255,255,255,.07); padding-top: 1.25rem; }
+  .checkout-includes li { font-size: .85rem; color: #ccc; padding: .35rem 0; display: flex; align-items: center; gap: .6rem; }
+  .checkout-includes li::before { content: '✓'; color: var(--verde-brilho); font-weight: 700; flex-shrink: 0; }
+  .checkout-price-row {
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,.07);
+    padding-top: 1.25rem; margin-top: 1.25rem;
+  }
+  .checkout-price-label { font-size: .85rem; color: var(--cinza-400); }
+  .checkout-price-value { font-family: var(--ff-display); font-size: 1.8rem; font-weight: 800; color: var(--dourado); }
+  .checkout-price-old { font-size: .8rem; color: var(--cinza-400); text-decoration: line-through; display: block; text-align: right; }
+
+  /* Painel direito – botão de pagamento */
+  .checkout-panel {
+    background: #111;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 16px;
+    padding: 2rem;
+    position: sticky; top: 100px;
+  }
+  .checkout-panel h2 {
+    font-family: var(--ff-display);
+    font-size: 1.2rem; font-weight: 800;
+    margin-bottom: .4rem;
+  }
+  .checkout-panel-sub { font-size: .85rem; color: var(--cinza-400); margin-bottom: 1.75rem; }
+
+  /* Formas de pagamento (visual informativo) */
+  .payment-methods {
+    display: flex; gap: .6rem; flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+  .payment-badge {
+    background: rgba(255,255,255,.06);
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+    padding: .45rem .9rem;
+    font-size: .78rem; font-weight: 600; color: #ddd;
+    display: flex; align-items: center; gap: .4rem;
+  }
+
+  /* Destaque do preço no painel */
+  .panel-price-box {
+    background: rgba(240,180,41,.07);
+    border: 1px solid rgba(240,180,41,.2);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  .panel-price-box .price-label { font-size: .8rem; color: var(--cinza-400); margin-bottom: .25rem; }
+  .panel-price-box .price-de { font-size: .85rem; color: var(--cinza-400); text-decoration: line-through; }
+  .panel-price-box .price-por { font-family: var(--ff-display); font-size: 2.4rem; font-weight: 800; color: var(--dourado); line-height: 1.1; }
+  .panel-price-box .price-parcela { font-size: .78rem; color: var(--cinza-400); margin-top: .25rem; }
+
+  /* Botão principal do checkout */
+  .btn-checkout {
+    display: block; width: 100%; text-align: center;
+    background: linear-gradient(135deg, #22A15A, #166B47);
+    color: var(--branco); font-weight: 700; font-size: 1.05rem;
+    padding: 1rem; border-radius: 12px;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    margin-bottom: 1rem;
+    letter-spacing: .01em;
+  }
+  .btn-checkout:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(34,161,90,.4); }
+
+  .checkout-security {
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    font-size: .78rem; color: var(--cinza-400);
+    margin-bottom: 1.25rem;
+  }
+  .checkout-security span { font-size: 1rem; }
+
+  /* Selos de confiança */
+  .trust-badges {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+    border-top: 1px solid rgba(255,255,255,.07);
+    padding-top: 1.25rem;
+  }
+  .trust-badge {
+    display: flex; align-items: center; gap: .5rem;
+    font-size: .78rem; color: var(--cinza-400);
+  }
+  .trust-badge-icon { font-size: 1.1rem; flex-shrink: 0; }
+
+  /* Botão voltar */
+  .btn-back {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: none; border: 1px solid rgba(255,255,255,.15);
+    color: var(--cinza-400); font-size: .85rem;
+    padding: .5rem 1rem; border-radius: 8px;
+    cursor: pointer; transition: color .2s, border-color .2s;
+    margin-bottom: 2rem; font-family: var(--ff-body);
+    text-decoration: none;
+  }
+  .btn-back:hover { color: var(--branco); border-color: rgba(255,255,255,.4); }
+
+  /* Kiwify badge */
+  .kiwify-badge {
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    margin-top: 1rem;
+    font-size: .75rem; color: var(--cinza-400);
+  }
+  .kiwify-badge strong { color: #ddd; }
+
+  /* ── Responsivo ──────────────────────────────────────────── */
+  @media (max-width: 720px) {
+    .checkout-wrapper { grid-template-columns: 1fr; }
+    .checkout-panel { position: static; }
+    nav { padding: .9rem 1.25rem; }
+    .stat-divider { display: none; }
+    section { padding: 3.5rem 1.25rem; }
+    .hero-stats { gap: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAVBAR ─────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" onclick="showPage('home')" style="cursor:pointer">Dinheiro<span> no Bolso</span></a>
+  <button class="nav-cta" onclick="irParaCheckout()">Comprar agora</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PÁGINA HOME
+══════════════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-badge"><span class="badge-dot"></span>Produto disponível agora</div>
+    <h1>Transforme sua relação<br>com o <em>dinheiro</em><br>de uma vez por todas</h1>
+    <p class="hero-sub">Guias práticos, diretos e comprovados para você sair do aperto, organizar as finanças e criar renda extra — mesmo começando do zero.</p>
+    <div class="hero-actions">
+      <button class="btn-primary" onclick="irParaCheckout()">Ver o produto →</button>
+      <a href="#porque" class="btn-outline">Por que confiar em nós?</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">+2.400</div><div class="stat-label">produtos vendidos</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num">4.9★</div><div class="stat-label">avaliação média</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat"><div class="stat-num">100%</div><div class="stat-label">digital e imediato</div></div>
+    </div>
+  </section>
+
+  <!-- PRODUTOS -->
+  <section id="produtos">
+    <div class="container">
+      <span class="section-tag fade-up">Infoprodutos</span>
+      <h2 class="section-title fade-up">Nosso produto <em>disponível</em></h2>
+      <p class="section-sub fade-up">Criado para ser aplicável imediatamente, com linguagem simples e resultados reais.</p>
+      <div class="produtos-grid">
+
+        <!-- Produto 1 — ATIVO -->
+        <div class="card fade-up">
+          <div class="card-cover card-cover-1">
+            💰
+            <span class="card-badge-cover">Mais Vendido</span>
+          </div>
+          <div class="card-body">
+            <div class="card-tag">E-book · PDF</div>
+            <div class="card-title">Dinheiro no Bolso: Guia Definitivo de Finanças Pessoais</div>
+            <div class="card-desc">Do caos financeiro à liberdade — um passo a passo completo para organizar, economizar, quitar dívidas e investir com pouco.</div>
+            <ul class="card-includes">
+              <li>7 capítulos + plano de 30 dias</li>
+              <li>15 formas de gerar renda extra</li>
+              <li>Tabelas de orçamento e investimento</li>
+              <li>Acesso imediato após o pagamento</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price">
+                <span class="price-old">R$ 97,00</span>
+                <span class="price-new">R$ 37,00</span>
+              </div>
+              <button class="btn-card" onclick="irParaCheckout()">Comprar agora</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 2 — EM BREVE -->
+        <div class="card fade-up desativado">
+          <div class="em-breve-banner"><span>🔒 Em breve</span><small>Este produto ainda não está disponível</small></div>
+          <div class="card-cover card-cover-2">📊</div>
+          <div class="card-body">
+            <div class="card-tag">Planilha · Excel / Google Sheets</div>
+            <div class="card-title">Planilha de Controle Financeiro Completa</div>
+            <div class="card-desc">Controle cada centavo do seu dinheiro com uma planilha intuitiva, com dashboard visual e alertas automáticos.</div>
+            <ul class="card-includes">
+              <li>Dashboard com gráficos automáticos</li>
+              <li>Controle de receitas e despesas</li>
+              <li>Simulador de metas e investimentos</li>
+              <li>Funciona no Excel e Google Sheets</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price"><span class="price-old">R$ 67,00</span><span class="price-new">R$ 27,00</span></div>
+              <span class="btn-card" style="background:#444;cursor:not-allowed">Em breve</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 3 — EM BREVE -->
+        <div class="card fade-up desativado">
+          <div class="em-breve-banner"><span>🔒 Em breve</span><small>Este produto ainda não está disponível</small></div>
+          <div class="card-cover card-cover-3">🚀</div>
+          <div class="card-body">
+            <div class="card-tag">E-book · PDF</div>
+            <div class="card-title">Renda Extra do Zero: 30 Ideias Validadas</div>
+            <div class="card-desc">Descubra 30 formas reais de ganhar dinheiro extra com o celular, em casa ou no seu tempo livre — sem precisar investir nada.</div>
+            <ul class="card-includes">
+              <li>30 ideias com potencial comprovado</li>
+              <li>Quanto dá pra ganhar em cada uma</li>
+              <li>Como começar em menos de 24h</li>
+              <li>Dicas de plataformas e clientes</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price"><span class="price-old">R$ 57,00</span><span class="price-new">R$ 27,00</span></div>
+              <span class="btn-card" style="background:#444;cursor:not-allowed">Em breve</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Produto 4 — EM BREVE -->
+        <div class="card fade-up desativado">
+          <div class="em-breve-banner"><span>🔒 Em breve</span><small>Este produto ainda não está disponível</small></div>
+          <div class="card-cover card-cover-4">💎</div>
+          <div class="card-body">
+            <div class="card-tag">Combo · E-books + Planilha</div>
+            <div class="card-title">Kit Liberdade Financeira: Tudo em Um</div>
+            <div class="card-desc">Os 2 e-books + a planilha completa com desconto exclusivo. Tudo que você precisa para transformar sua vida financeira de uma vez.</div>
+            <ul class="card-includes">
+              <li>Guia Definitivo de Finanças Pessoais</li>
+              <li>30 Ideias de Renda Extra</li>
+              <li>Planilha de Controle Completa</li>
+              <li>Bônus: Checklist de Metas Financeiras</li>
+            </ul>
+            <div class="card-footer">
+              <div class="card-price"><span class="price-old">R$ 221,00</span><span class="price-new">R$ 67,00</span></div>
+              <span class="btn-card" style="background:#444;cursor:not-allowed">Em breve</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- POR QUE COMPRAR -->
+  <section id="porque">
+    <div class="container">
+      <span class="section-tag fade-up">Diferenciais</span>
+      <h2 class="section-title fade-up">Por que nossos produtos <em>funcionam</em>?</h2>
+      <p class="section-sub fade-up">Desenvolvidos para quem não tem tempo a perder e quer resultados rápidos.</p>
+      <div class="porque-grid">
+        <div class="porque-card fade-up"><div class="porque-icon">⚡</div><div class="porque-title">Acesso imediato</div><div class="porque-text">Após o pagamento, você recebe o produto na hora, direto no seu e-mail — sem esperar.</div></div>
+        <div class="porque-card fade-up"><div class="porque-icon">📱</div><div class="porque-title">Funciona no celular</div><div class="porque-text">Todos os materiais são otimizados para leitura no celular, tablet e computador.</div></div>
+        <div class="porque-card fade-up"><div class="porque-icon">🎯</div><div class="porque-title">Linguagem simples</div><div class="porque-text">Sem enrolação, sem termos técnicos complicados. Direto ao ponto, com exemplos do dia a dia.</div></div>
+        <div class="porque-card fade-up"><div class="porque-icon">🔒</div><div class="porque-title">Pagamento seguro</div><div class="porque-text">Processado pela Kiwify, a plataforma mais confiável do mercado de infoprodutos do Brasil.</div></div>
+        <div class="porque-card fade-up"><div class="porque-icon">✅</div><div class="porque-title">Resultados reais</div><div class="porque-text">Conteúdo baseado em métodos comprovados usados por milhares de pessoas que transformaram suas finanças.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEPOIMENTOS -->
+  <section id="depoimentos">
+    <div class="container">
+      <span class="section-tag fade-up">Depoimentos</span>
+      <h2 class="section-title fade-up">O que dizem quem já <em>comprou</em></h2>
+      <p class="section-sub fade-up">Resultados reais de pessoas reais.</p>
+      <div class="depo-grid">
+        <div class="depo-card fade-up"><div class="depo-stars">★★★★★</div><div class="depo-text">"Comprei o guia sem muita expectativa, mas foi surpreendente. Em 30 dias já tinha quitado uma dívida que carregava há 2 anos."</div><div class="depo-autor"><div class="depo-avatar">CM</div><div><div class="depo-nome">Carla Mendes</div><div class="depo-cidade">São Paulo – SP</div></div></div></div>
+        <div class="depo-card fade-up"><div class="depo-stars">★★★★★</div><div class="depo-text">"Pela primeira vez eu sei exatamente para onde vai cada real. Recomendo para todo mundo que conheço."</div><div class="depo-autor"><div class="depo-avatar">RS</div><div><div class="depo-nome">Rodrigo Santos</div><div class="depo-cidade">Belo Horizonte – MG</div></div></div></div>
+        <div class="depo-card fade-up"><div class="depo-stars">★★★★★</div><div class="depo-text">"Em 3 semanas já estava ganhando R$600 extras por mês como freelancer. Vale muito mais do que o preço."</div><div class="depo-autor"><div class="depo-avatar">PL</div><div><div class="depo-nome">Patrícia Lima</div><div class="depo-cidade">Fortaleza – CE</div></div></div></div>
+        <div class="depo-card fade-up"><div class="depo-stars">★★★★★</div><div class="depo-text">"Em 6 meses consegui sair do vermelho, criar uma reserva e começar a investir. Recomendo demais!"</div><div class="depo-autor"><div class="depo-avatar">TF</div><div><div class="depo-nome">Thiago Ferreira</div><div class="depo-cidade">Curitiba – PR</div></div></div></div>
+        <div class="depo-card fade-up"><div class="depo-stars">★★★★★</div><div class="depo-text">"Linguagem simples, prática e direta. Tudo aqui dá pra aplicar no mesmo dia que você lê."</div><div class="depo-autor"><div class="depo-avatar">AN</div><div><div class="depo-nome">Ana Nascimento</div><div class="depo-cidade">Recife – PE</div></div></div></div>
+        <div class="depo-card fade-up"><div class="depo-stars">★★★★★</div><div class="depo-text">"Hoje invisto R$200 por mês e estou construindo meu patrimônio. Nunca imaginei que seria tão simples."</div><div class="depo-autor"><div class="depo-avatar">MO</div><div><div class="depo-nome">Marcos Oliveira</div><div class="depo-cidade">Porto Alegre – RS</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="container">
+      <span class="section-tag fade-up">Dúvidas</span>
+      <h2 class="section-title fade-up">Perguntas <em>frequentes</em></h2>
+      <div class="faq-list">
+        <div class="faq-item fade-up"><button class="faq-btn" onclick="toggleFaq(this)">Como recebo o produto após a compra?<span class="faq-icon">+</span></button><div class="faq-answer">Logo após o pagamento ser aprovado, você recebe um e-mail da Kiwify com o link de acesso. O processo é automático e leva menos de 5 minutos. Verifique sua caixa de spam se não receber.</div></div>
+        <div class="faq-item fade-up"><button class="faq-btn" onclick="toggleFaq(this)">O produto funciona no celular?<span class="faq-icon">+</span></button><div class="faq-answer">Sim! O e-book é em PDF e funciona perfeitamente em qualquer celular, tablet ou computador.</div></div>
+        <div class="faq-item fade-up"><button class="faq-btn" onclick="toggleFaq(this)">Preciso ter conhecimento de finanças para usar?<span class="faq-icon">+</span></button><div class="faq-answer">Não! O material foi criado pensando em pessoas que estão começando do zero. A linguagem é simples, prática e sem termos técnicos.</div></div>
+        <div class="faq-item fade-up"><button class="faq-btn" onclick="toggleFaq(this)">Quantas vezes posso acessar o produto?<span class="faq-icon">+</span></button><div class="faq-answer">O produto é seu para sempre. Após o download, salve no celular, computador ou nuvem e acesse quando quiser.</div></div>
+        <div class="faq-item fade-up"><button class="faq-btn" onclick="toggleFaq(this)">O pagamento é seguro?<span class="faq-icon">+</span></button><div class="faq-answer">Sim. O pagamento é processado pela Kiwify, uma das plataformas mais seguras do Brasil para compra de infoprodutos. Aceitamos cartão de crédito, PIX e boleto.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA FINAL -->
+  <section id="cta-final">
+    <div class="container">
+      <h2 class="fade-up">Pronto para virar o jogo<br>das suas <em style="color:var(--dourado)">finanças</em>?</h2>
+      <p class="fade-up">Comece hoje. Sem desculpas, sem esperar o momento certo. O momento certo é agora.</p>
+      <button class="btn-primary fade-up" onclick="irParaCheckout()" style="font-size:1.05rem;padding:1rem 2.5rem;border:none;cursor:pointer">
+        Quero meu e-book agora →
+      </button>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 Dinheiro no Bolso · Todos os direitos reservados · <a href="mailto:contato@seusite.com">contato@seusite.com</a></p>
+    <p style="margin-top:.5rem">Os resultados podem variar de pessoa para pessoa.</p>
+  </footer>
+
+</div><!-- /page-home -->
+
+
+<!-- ══════════════════════════════════════════════════════════════
+     PÁGINA CHECKOUT
+══════════════════════════════════════════════════════════════ -->
+<div id="page-checkout" class="page">
+  <div class="checkout-wrapper">
+
+    <!-- COLUNA ESQUERDA: resumo do produto -->
+    <div>
+      <button class="btn-back" onclick="showPage('home')">← Voltar à loja</button>
+
+      <div class="checkout-summary">
+        <div class="checkout-cover">
+          💰
+          <span class="checkout-cover-badge">Mais Vendido</span>
+        </div>
+        <div class="checkout-info">
+          <div class="checkout-tag">E-book · PDF · Entrega por e-mail</div>
+          <div class="checkout-title">Dinheiro no Bolso: Guia Definitivo de Finanças Pessoais</div>
+          <div class="checkout-desc">Do caos financeiro à liberdade — um guia passo a passo para organizar suas finanças, quitar dívidas e começar a investir, mesmo com pouco dinheiro.</div>
+          <ul class="checkout-includes">
+            <li>7 capítulos completos + plano de ação de 30 dias</li>
+            <li>15 formas validadas de gerar renda extra</li>
+            <li>Tabelas de orçamento mensal prontas para usar</li>
+            <li>Simulador de investimentos com juros compostos</li>
+            <li>Estratégias para sair das dívidas de uma vez</li>
+            <li>Acesso imediato após o pagamento via e-mail</li>
+          </ul>
+          <div class="checkout-price-row">
+            <div class="checkout-price-label">Você está pagando</div>
+            <div>
+              <span class="checkout-price-old">De R$ 97,00</span>
+              <span class="checkout-price-value">R$ 37,00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COLUNA DIREITA: painel de pagamento -->
+    <div class="checkout-panel">
+      <h2>Finalizar compra</h2>
+      <p class="checkout-panel-sub">Você será redirecionado para o checkout seguro da Kiwify.</p>
+
+      <div class="panel-price-box">
+        <div class="price-label">Valor total</div>
+        <div class="price-de">R$ 97,00</div>
+        <div class="price-por">R$ 37,00</div>
+        <div class="price-parcela">ou 3x de R$ 13,13 sem juros</div>
+      </div>
+
+      <div style="margin-bottom:1rem">
+        <div style="font-size:.8rem;color:var(--cinza-400);margin-bottom:.6rem;font-weight:600">Formas de pagamento aceitas</div>
+        <div class="payment-methods">
+          <span class="payment-badge">💳 Cartão de crédito</span>
+          <span class="payment-badge">⚡ PIX</span>
+          <span class="payment-badge">📄 Boleto</span>
+        </div>
+      </div>
+
+      <!-- BOTÃO PRINCIPAL — substitua o href pelo seu link Kiwify -->
+      <a href="SEU_LINK_KIWIFY_AQUI" target="_blank" class="btn-checkout">
+        🔒 Comprar com segurança — R$ 37,00
+      </a>
+
+      <div class="checkout-security">
+        <span>🔐</span> Ambiente 100% seguro · Dados protegidos
+      </div>
+
+      <div class="trust-badges">
+        <div class="trust-badge"><span class="trust-badge-icon">⚡</span>Entrega imediata por e-mail</div>
+        <div class="trust-badge"><span class="trust-badge-icon">📱</span>Funciona no celular</div>
+        <div class="trust-badge"><span class="trust-badge-icon">🔒</span>Pagamento criptografado</div>
+        <div class="trust-badge"><span class="trust-badge-icon">📧</span>Suporte por e-mail</div>
+      </div>
+
+      <div class="kiwify-badge">
+        <span>Processado com segurança por</span>
+        <strong>Kiwify</strong>
+      </div>
+    </div>
+
+  </div>
+</div><!-- /page-checkout -->
+
+
+<script>
+  /* ── Navegação entre páginas ─────────────────────────────── */
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    initFadeUps();
+  }
+
+  function irParaCheckout() {
+    showPage('checkout');
+  }
+
+  /* ── FAQ ─────────────────────────────────────────────────── */
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  /* ── Scroll reveal ───────────────────────────────────────── */
+  function initFadeUps() {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+      });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.page.active .fade-up:not(.visible)').forEach((el, i) => {
+      el.style.transitionDelay = `${(i % 5) * 0.07}s`;
+      observer.observe(el);
+    });
+  }
+
+  initFadeUps();
+</script>
+</body>
+</html>
